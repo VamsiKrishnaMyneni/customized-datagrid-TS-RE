@@ -1,5 +1,6 @@
 import useProductsFetch from './useProductsFetch';
-import './products.css';
+import './products.css'
+import Datagrid from '../datagrid';
 
 function Products() {
     const { data, loading, error } = useProductsFetch();
@@ -7,6 +8,23 @@ function Products() {
     const onProductChange = (id: number) => {
         console.log(`Product with ID ${id} selected`);
     }
+
+
+    // Usage example
+    const columns = [
+        {
+            label: "", key: "", width: 50, render: (rowData: any) => {
+                return <input type="checkbox" className='product-select' onChange={() => onProductChange(rowData)} />
+            }
+        },
+        { label: "Image", key: "image", width: 70 },
+        { label: "Title", key: "title", width: 100 },
+        { label: "Price", key: "price", width: 40 },
+        { label: "Rating", key: "rating.rate", width: 70 },
+        { label: "Description", key: "description", width: 200 },
+        { label: "Category", key: "category", width: 100 }
+    ];
+
 
     return (
         <>
@@ -18,7 +36,7 @@ function Products() {
             {data && data.length > 0 && (
                 <div className='products-container'>
                     <h2>Products Comparison</h2>
-                    <div className='products-table-container'>
+                    {/* <div className='products-table-container'>
                         <table className="products-table">
                             <thead>
                                 <tr>
@@ -51,7 +69,8 @@ function Products() {
                                 ))}
                             </tbody>
                         </table>
-                    </div>
+                    </div> */}
+                    <Datagrid data={data} columns={columns} />
                 </div>
             )}
         </>
