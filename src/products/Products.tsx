@@ -17,7 +17,7 @@ function Products() {
 
             {data && data.length > 0 && (
                 <div className='products-container'>
-                    <h2>Products</h2>
+                    <h2>Products Comparison</h2>
                     <table className="products-table">
                         <thead>
                             <tr>
@@ -33,7 +33,7 @@ function Products() {
                         <tbody>
                             {data.map((product) => (
                                 <tr key={product.id}>
-                                    <td><input type="checkbox" onChange={() => onProductChange(product.id)} /></td>
+                                    <td><input type="checkbox" className='product-select' onChange={() => onProductChange(product.id)} /></td>
                                     <td>  <img src={product.image} alt={product.title} className="product-image" /></td>
                                     <td>
                                         <div className="product-title" title={product.title}>{product.title}</div>
