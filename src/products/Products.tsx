@@ -1,12 +1,15 @@
-import useProductsFetch from './useProductsFetch';
+import { useState, useEffect } from 'react';
+import useProductsFetch from './fetch/useProductsFetch';
 import './products.css'
 import DataGrid from '../datagrid';
-import { useState } from 'react';
 
 function Products() {
-    const { data, loading, error } = useProductsFetch();
+    const { data, loading, error, fetchData } = useProductsFetch();
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
+    useEffect(() => {
+        fetchData && fetchData();
+    }, []);
 
     const handleRowSelect = (row: any) => {
         setSelectedRows((prevSelectedRows) => {
@@ -100,17 +103,18 @@ function Products() {
 
     return (
         <>
-            {loading && <p>Loading...</p>}
-            {error && <><h2>{error}</h2>
-                <button className='btn-refresh' onClick={() => window.location.reload()}>Try again</button></>}
-            {!loading && !error && data.length === 0 && <p>No products found.</p>}
-
-            {data && data.length > 0 && (
+            {(loading || error) && (<div className='no-data-container'>
+                {loading && <p>Loading...</p>}
+                {error && <><h2>{error}</h2>
+                    <button className='btn-refresh' onClick={() => window.location.reload()}>Try again</button></>}
+            </div>)
+            }
+            {
                 <div className='products-container'>
                     <h2>Products Comparison</h2>
                     <DataGrid data={data} columns={columns} cellStyles={getCellStyle} />
                 </div>
-            )}
+            }
         </>
     )
 }

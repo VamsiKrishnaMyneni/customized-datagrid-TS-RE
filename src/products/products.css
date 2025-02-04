@@ -16,6 +16,12 @@
     /* Slightly darker gray on hover */
 }
 
+.no-data-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
 .products-container {
     padding: 20px;
 

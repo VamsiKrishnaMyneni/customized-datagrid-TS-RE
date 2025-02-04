@@ -1,10 +1,10 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Products from "./Products";
-import useProductsFetch from "./useProductsFetch";
+import useProductsFetch from "./fetch/useProductsFetch";
 
 // Mock API fetch hook
-jest.mock("./useProductsFetch");
+jest.mock("./fetch/useProductsFetch");
 
 const mockProducts = [
     {
@@ -60,7 +60,7 @@ describe("Products Component", () => {
         (useProductsFetch as jest.Mock).mockReturnValue({ data: [], loading: false, error: null });
 
         render(<Products />);
-        expect(screen.getByText("No products found.")).toBeInTheDocument();
+        expect(screen.getByText("No rows to display")).toBeInTheDocument();
     });
 
     test("renders product list with correct data", () => {
