@@ -10,8 +10,8 @@ function Products() {
 
     const handleRowSelect = (row: any) => {
         setSelectedRows((prevSelectedRows) => {
-            if (prevSelectedRows.includes(row)) {
-                return prevSelectedRows.filter((selectedRow) => selectedRow !== row);
+            if (prevSelectedRows.find((selectedRow) => selectedRow.id === row.id)) {
+                return prevSelectedRows.filter((selectedRow) => selectedRow.id !== row.id);
             } else {
                 return [...prevSelectedRows, row];
             }
@@ -19,17 +19,17 @@ function Products() {
     };
 
     const getValue = (row: any, key: any) => {
-        return key.split(".").reduce((acc: any, val: any) => acc[val], row) || "-";
+        return key.split(".").reduce((acc: any, val: any) => acc[val], row) || null;
     };
     // Get the difference in values between selected rows for comparison
     const getComparisonDifference = (columnKey: string) => {
         if (selectedRows.length < 2) return;
-
+        console.log(columnKey)
         const values = selectedRows.map((row: any) => getValue(row, columnKey));
         const min = Math.min(...values);
         const max = Math.max(...values);
 
-        return { min, max };
+        return (min && max) ? { min, max } : {};
     };
 
     const getCellStyle = (columnKey: string, value: any) => {
