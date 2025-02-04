@@ -24,7 +24,7 @@ function Products() {
     // Get the difference in values between selected rows for comparison
     const getComparisonDifference = (columnKey: string) => {
         if (selectedRows.length < 2) return;
-        console.log(columnKey)
+
         const values = selectedRows.map((row: any) => getValue(row, columnKey));
         const min = Math.min(...values);
         const max = Math.max(...values);
