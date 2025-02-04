@@ -3,7 +3,7 @@ import Products from './products/Products';
 
 function App() {
   return (
-    <div className="App">
+    <div className="App" data-testid='app'>
       <Products />
     </div>
   );

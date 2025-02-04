@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 
 const useProductsFetch = () => {
     const [data, setData] = useState<any[]>([]);
@@ -8,8 +7,9 @@ const useProductsFetch = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('https://fakestoreapi.com/products');
-            setData(response.data);
+            const response = await fetch('https://fakestoreapi.com/products');
+            const { data } = await response.json();
+            setData(data);
         } catch (err: any) {
             setError("oops! Something went wrong.");
         } finally {
