@@ -6,7 +6,7 @@ interface datagridProps {
     data: any[],
     height?: number,
     onRowClick?: (row: any) => {},
-    cellStyles?: (row: any, key: string) => {},
+    cellStyles?: (row: any, key: string, category: string) => {},
 }
 
 function DataGrid(props: datagridProps) {
@@ -73,7 +73,7 @@ function DataGrid(props: datagridProps) {
                             >
                                 {columns.map((col: any) => (
                                     <td key={col.key}
-                                        style={cellStyles && cellStyles(col.key, getValue(row, col.key))}
+                                        style={cellStyles && cellStyles(col.key, getValue(row, col.key), row.category)}
                                     >
                                         {col.render ? col.render(row, getValue(row, col.key)) : getValue(row, col.key)}
                                     </td>

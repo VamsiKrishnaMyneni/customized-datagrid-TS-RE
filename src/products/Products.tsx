@@ -21,30 +21,52 @@ function Products() {
     const getValue = (row: any, key: any) => {
         return key.split(".").reduce((acc: any, val: any) => acc[val], row) || null;
     };
+
     // Get the difference in values between selected rows for comparison
+    // Get the difference in values between selected rows for comparison within the same category
     const getComparisonDifference = (columnKey: string) => {
-        if (selectedRows.length < 2) return;
+        if (selectedRows.length < 2) return null;
 
-        const values = selectedRows.map((row: any) => getValue(row, columnKey));
-        const min = Math.min(...values);
-        const max = Math.max(...values);
+        // Group selected products by category
+        const groupedByCategory = selectedRows.reduce((acc: any, row: any) => {
+            const category = row.category;
+            if (!acc[category]) acc[category] = [];
+            acc[category].push(row);
+            return acc;
+        }, {});
 
-        return (min && max) ? { min, max } : {};
+        const differences: any = {};
+
+        Object.keys(groupedByCategory).forEach((category) => {
+            const categoryProducts = groupedByCategory[category];
+
+            if (categoryProducts.length > 1) {
+                const values = categoryProducts.map((row: any) => getValue(row, columnKey));
+                const min = Math.min(...values);
+                const max = Math.max(...values);
+
+                if (min !== max) {
+                    differences[category] = { min, max };
+                }
+            }
+        });
+
+        return differences;
     };
 
-    const getCellStyle = (columnKey: string, value: any) => {
+
+
+    const getCellStyle = (columnKey: string, value: any, category: string) => {
         if (selectedRows.length < 2) return {};
 
         const differences = getComparisonDifference(columnKey);
-        if (!differences) return {};
+        if (!differences || !differences[category]) return {};
 
-        // Color the cells based on the difference
-        const isHigher = value === differences.max;
-        const isLower = value === differences.min;
+        const { min, max } = differences[category];
 
         return {
-            backgroundColor: isHigher ? "lightgreen" : isLower ? "lightcoral" : "",
-            fontWeight: isHigher || isLower ? "bold" : "normal",
+            backgroundColor: value === max ? "lightgreen" : value === min ? "lightcoral" : "",
+            fontWeight: value === max || value === min ? "bold" : "normal",
         };
     };
 
