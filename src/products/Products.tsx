@@ -1,6 +1,7 @@
 import useProductsFetch from './useProductsFetch';
 import './products.css'
 import Datagrid from '../datagrid';
+import { render } from '@testing-library/react';
 
 function Products() {
     const { data, loading, error } = useProductsFetch();
@@ -13,16 +14,26 @@ function Products() {
     // Usage example
     const columns = [
         {
-            label: "", key: "", width: 30, render: (rowData: any) => {
+            label: "", key: "", width: 10, render: (rowData: any) => {
                 return <input type="checkbox" className='product-select' onChange={() => onProductChange(rowData)} />
             }
         },
-        { label: "Image", key: "image", width: 70 },
-        { label: "Title", key: "title", width: 100 },
+        {
+            label: "Image", key: "image", width: 40, render: (rowData: any) => {
+                return <img src={rowData.image} alt={rowData.title} className="product-image" />
+            }
+        },
+        { label: "Title", key: "title", width: 180, render: (rowData: any) => <div className="product-title" title={rowData.title}>{rowData.title}</div> },
         { label: "Price", key: "price", width: 40 },
-        { label: "Rating", key: "rating.rate", width: 70 },
-        { label: "Description", key: "description", width: 200 },
-        { label: "Category", key: "category", width: 100 }
+        {
+            label: "Rating", key: "rating.rate", width: 70, render: (rowData: any) => <><div className="star-rating" style={{ "--rating": `${rowData.rating.rate}` } as React.CSSProperties} aria-label="Rating of this product is 2.3 out of 5."></div>
+                <div className='ratings-count'>{rowData.rating.count} ratings</div></>
+        },
+        {
+            label: "Description", key: "description", width: 200, render: (rowData: any) => <div className="product-description" title={rowData.description}>
+                {rowData.description.length > 100 ? `${rowData.description.slice(0, 100)}...` : rowData.description} </div>
+        },
+        { label: "Category", key: "category", width: 80 }
     ];
 
 
@@ -52,8 +63,7 @@ function Products() {
                             <tbody>
                                 {data.map((product) => (
                                     <tr key={product.id}>
-                                        <td className='prodcut-select-cell'><input type="checkbox" className='product-select' onChange={() => onProductChange(product.id)} /></td>
-                                        <td>  <img src={product.image} alt={product.title} className="product-image" /></td>
+                                        
                                         <td>
                                             <div className="product-title" title={product.title}>{product.title}</div>
                                         </td>

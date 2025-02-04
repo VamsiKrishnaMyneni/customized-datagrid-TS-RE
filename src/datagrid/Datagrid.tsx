@@ -1,6 +1,5 @@
-import React, { ReactElement, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import './datagrid.css'
-import { createRoot } from 'react-dom/client'
 
 interface datagridProps {
     columns: any[],
@@ -16,88 +15,56 @@ function Datagrid(props: datagridProps) {
         height = 400,
         onRowClick
     } = props
+    const [tableData, setTableData] = useState(data || []);
 
     useEffect(() => {
-        render();
-    })
+        setTableData(tableData)
+    }, [])
 
-    const getValue = (row: any, key: string) => {
-        const keyArr = key.split('.');
-        return keyArr.reduce((acc, val) => acc[val], row) || '-';
-    }
-    const render = () => {
-        const container = document.getElementById("datagrid-container")!;
-        const tableContainer = document.createElement("div");
-        tableContainer.className = "table-container";
-        tableContainer.style.height = `${height.toString()}px`;
 
-        const table = document.createElement("table");
-        table.className = "table";
-        table.style.width = `max(100%, ${columns.reduce(
-            (acc, col) => acc + (col.width || 200),
-            0
-        )}px)`;
+    const getValue = (row: any, key: any) => {
+        return key.split(".").reduce((acc: any, val: any) => acc[val], row) || "-";
+    };
 
-        // Create table header
-        const thead = document.createElement("thead");
-        const headerRow = document.createElement("tr");
-
-        columns.forEach((col) => {
-            const th = document.createElement("th");
-            th.style.width = `${col.width || 200}px`;
-            th.textContent = col.label;
-            headerRow.appendChild(th);
-        });
-
-        thead.appendChild(headerRow);
-        table.appendChild(thead);
-
-        // Create table body
-        const tbody = document.createElement("tbody");
-
-        if (data.length > 0) {
-            data.forEach((row, rowIndex) => {
-                const tr = document.createElement("tr");
-                tr.className = rowIndex % 2 === 0 ? "bg-white" : "bg-neutral-50";
-                tr.addEventListener("click", () => {
-                    if (onRowClick) onRowClick(row);
-                });
-                const convertJSXToHTMLNode = (jsx: any) => {
-                    const container = document.createElement("div"); // Temporary container
-                    const root = createRoot(container);
-                    root.render(jsx);
-                    return container.firstChild; // Extract the real DOM node
-                };
-
-                columns.forEach((col) => {
-                    const td = document.createElement("td");
-                    const cellData = getValue(row, col.key) || "-";
-
-                    const renderedData = col.render ? col.render(cellData, row) : cellData;
-                    td.textContent = renderedData;
-                    tr.appendChild(td);
-                });
-
-                tbody.appendChild(tr);
-            });
-        } else {
-            const noDataRow = document.createElement("tr");
-            const noDataCell = document.createElement("td");
-            noDataCell.colSpan = columns.length;
-            noDataCell.className = "no-data";
-            noDataCell.textContent = "No rows to display";
-            noDataRow.appendChild(noDataCell);
-            tbody.appendChild(noDataRow);
-        }
-
-        table.appendChild(tbody);
-        tableContainer.appendChild(table);
-        container.innerHTML = "";
-        container.appendChild(tableContainer);
-    }
     return (
-        <div id="datagrid-container"></div>
-    )
+        <div id="datagrid-container" className="table-container" style={{ height: `${height}px` }}>
+            <table className="table" style={{ width: `max(100%, ${columns.reduce((acc, col) => acc + (col.width || 200), 0)}px)` }}>
+                <thead>
+                    <tr>
+                        {columns.map((col) => (
+                            <th key={col.key} style={{ width: col.width || 200 }}>
+                                {col.label}
+                            </th>
+                        ))}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {tableData.length > 0 ? (
+                        tableData.map((row, rowIndex) => (
+                            <tr
+                                key={rowIndex}
+                                className={rowIndex % 2 === 0 ? "bg-white" : "bg-neutral-50"}
+                                onClick={() => onRowClick && onRowClick(row)}
+                            >
+                                {columns.map((col) => (
+                                    <td key={col.key}>
+                                        {col.render ? col.render(row, getValue(row, col.key)) : getValue(row, col.key)}
+                                    </td>
+                                ))}
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={columns.length} className="no-data">
+                                No rows to display
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        </div>
+    );
 }
 
 export default Datagrid
