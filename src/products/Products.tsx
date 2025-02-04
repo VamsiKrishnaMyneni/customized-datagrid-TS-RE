@@ -1,7 +1,6 @@
 import useProductsFetch from './useProductsFetch';
 import './products.css'
 import Datagrid from '../datagrid';
-import { render } from '@testing-library/react';
 
 function Products() {
     const { data, loading, error } = useProductsFetch();
@@ -24,9 +23,9 @@ function Products() {
             }
         },
         { label: "Title", key: "title", width: 180, render: (rowData: any) => <div className="product-title" title={rowData.title}>{rowData.title}</div> },
-        { label: "Price", key: "price", width: 40 },
+        { label: "Price", key: "price", width: 40, sort: true },
         {
-            label: "Rating", key: "rating.rate", width: 70, render: (rowData: any) => <><div className="star-rating" style={{ "--rating": `${rowData.rating.rate}` } as React.CSSProperties} aria-label="Rating of this product is 2.3 out of 5."></div>
+            label: "Rating", key: "rating.rate", width: 70, sort: true, render: (rowData: any) => <><div className="star-rating" style={{ "--rating": `${rowData.rating.rate}` } as React.CSSProperties} aria-label="Rating of this product is 2.3 out of 5."></div>
                 <div className='ratings-count'>{rowData.rating.count} ratings</div></>
         },
         {
