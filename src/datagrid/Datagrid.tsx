@@ -5,11 +5,12 @@ interface datagridProps {
     columns: any[],
     data: any[],
     height?: number,
-    onRowClick?: (row: any) => {}
+    onRowClick?: (row: any) => {},
+    cellStyles?: (row: any, key: string) => {},
 }
 
-function Datagrid(props: datagridProps) {
-    const { columns = [], data = [], height = 400, onRowClick } = props;
+function DataGrid(props: datagridProps) {
+    const { columns = [], data = [], height = 400, onRowClick, cellStyles } = props;
     const [tableData, setTableData] = useState(data || []);
     const [sortConfig, setSortConfig] = useState({ key: '', direction: "asc" });
 
@@ -68,9 +69,12 @@ function Datagrid(props: datagridProps) {
                                 key={rowIndex}
                                 className={rowIndex % 2 === 0 ? "bg-white" : "bg-neutral-50"}
                                 onClick={() => onRowClick && onRowClick(row)}
+
                             >
                                 {columns.map((col: any) => (
-                                    <td key={col.key}>
+                                    <td key={col.key}
+                                        style={cellStyles && cellStyles(col.key, getValue(row, col.key))}
+                                    >
                                         {col.render ? col.render(row, getValue(row, col.key)) : getValue(row, col.key)}
                                     </td>
                                 ))}
@@ -89,4 +93,4 @@ function Datagrid(props: datagridProps) {
     );
 }
 
-export default Datagrid
+export default DataGrid

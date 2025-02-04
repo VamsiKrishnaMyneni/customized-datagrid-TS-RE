@@ -1,20 +1,60 @@
 import useProductsFetch from './useProductsFetch';
 import './products.css'
-import Datagrid from '../datagrid';
+import DataGrid from '../datagrid';
+import { useState } from 'react';
 
 function Products() {
     const { data, loading, error } = useProductsFetch();
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
-    const onProductChange = (id: number) => {
-        console.log(`Product with ID ${id} selected`);
-    }
+
+    const handleRowSelect = (row: any) => {
+        setSelectedRows((prevSelectedRows) => {
+            if (prevSelectedRows.includes(row)) {
+                return prevSelectedRows.filter((selectedRow) => selectedRow !== row);
+            } else {
+                return [...prevSelectedRows, row];
+            }
+        });
+    };
+
+    const getValue = (row: any, key: any) => {
+        return key.split(".").reduce((acc: any, val: any) => acc[val], row) || "-";
+    };
+    // Get the difference in values between selected rows for comparison
+    const getComparisonDifference = (columnKey: string) => {
+        if (selectedRows.length < 2) return;
+
+        const values = selectedRows.map((row: any) => getValue(row, columnKey));
+        const min = Math.min(...values);
+        const max = Math.max(...values);
+
+        return { min, max };
+    };
+
+    const getCellStyle = (columnKey: string, value: any) => {
+        if (selectedRows.length < 2) return {};
+
+        const differences = getComparisonDifference(columnKey);
+        if (!differences) return {};
+
+        // Color the cells based on the difference
+        const isHigher = value === differences.max;
+        const isLower = value === differences.min;
+
+        return {
+            backgroundColor: isHigher ? "lightgreen" : isLower ? "lightcoral" : "",
+            fontWeight: isHigher || isLower ? "bold" : "normal",
+        };
+    };
+
 
 
     // Usage example
     const columns = [
         {
             label: "", key: "", width: 10, render: (rowData: any) => {
-                return <input type="checkbox" className='product-select' onChange={() => onProductChange(rowData)} />
+                return <input type="checkbox" className='product-select' onChange={() => handleRowSelect(rowData)} />
             }
         },
         {
@@ -46,40 +86,7 @@ function Products() {
             {data && data.length > 0 && (
                 <div className='products-container'>
                     <h2>Products Comparison</h2>
-                    {/* <div className='products-table-container'>
-                        <table className="products-table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Image</th>
-                                    <th>Title</th>
-                                    <th>Price</th>
-                                    <th>Rating</th>
-                                    <th>Description</th>
-                                    <th>Category</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.map((product) => (
-                                    <tr key={product.id}>
-                                        
-                                        <td>
-                                            <div className="product-title" title={product.title}>{product.title}</div>
-                                        </td>
-                                        <td>{product.price}</td>
-
-                                        <td><div className="star-rating" style={{ "--rating": `${product.rating.rate}` } as React.CSSProperties} aria-label="Rating of this product is 2.3 out of 5."></div>
-                                            <div className='ratings-count'>{product.rating.count} ratings</div>  </td>
-                                        <td> <div className="product-description" title={product.description}>
-                                            {product.description.length > 100 ? `${product.description.slice(0, 100)}...` : product.description} </div>
-                                        </td>
-                                        <td>{product.category}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div> */}
-                    <Datagrid data={data} columns={columns} />
+                    <DataGrid data={data} columns={columns} cellStyles={getCellStyle} />
                 </div>
             )}
         </>
