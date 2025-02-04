@@ -50,8 +50,13 @@ function Datagrid(props: datagridProps) {
                                 key={col.key}
                                 style={{ width: col.width || 200, cursor: "pointer" }}
                                 onClick={() => (col.sort && col.key) && handleSort(col.key)}
+                                className='col-header'
                             >
-                                {col.label} {(sortConfig.key === col.key && col.sort && col.key) ? (sortConfig.direction === "asc" ? "▲" : "▼") : ""}
+                                {col.label} &nbsp; {(sortConfig.key === col.key && col.sort && col.key) ? (sortConfig.direction === "asc" ? (
+                                    <i className="fas fa-sort-up"></i>
+                                ) : (
+                                    <i className="fas fa-sort-down"></i>
+                                )) : ""}
                             </th>
                         ))}
                     </tr>
