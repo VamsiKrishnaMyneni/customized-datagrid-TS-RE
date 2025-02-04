@@ -13,7 +13,7 @@ function Products() {
     // Usage example
     const columns = [
         {
-            label: "", key: "", width: 50, render: (rowData: any) => {
+            label: "", key: "", width: 30, render: (rowData: any) => {
                 return <input type="checkbox" className='product-select' onChange={() => onProductChange(rowData)} />
             }
         },

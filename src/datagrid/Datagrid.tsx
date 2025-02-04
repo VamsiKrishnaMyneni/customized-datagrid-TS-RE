@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react'
+import React, { ReactElement, useEffect } from 'react'
 import './datagrid.css'
+import { createRoot } from 'react-dom/client'
 
 interface datagridProps {
     columns: any[],
@@ -61,12 +62,19 @@ function Datagrid(props: datagridProps) {
                 tr.addEventListener("click", () => {
                     if (onRowClick) onRowClick(row);
                 });
+                const convertJSXToHTMLNode = (jsx: any) => {
+                    const container = document.createElement("div"); // Temporary container
+                    const root = createRoot(container);
+                    root.render(jsx);
+                    return container.firstChild; // Extract the real DOM node
+                };
 
                 columns.forEach((col) => {
                     const td = document.createElement("td");
                     const cellData = getValue(row, col.key) || "-";
 
-                    td.innerHTML = col.render ? col.render(cellData, row) || "-" : cellData;
+                    const renderedData = col.render ? col.render(cellData, row) : cellData;
+                    td.textContent = renderedData;
                     tr.appendChild(td);
                 });
 
