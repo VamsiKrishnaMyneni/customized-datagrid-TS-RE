@@ -65,7 +65,7 @@ function Products() {
         const { min, max } = differences[category];
 
         return {
-            backgroundColor: value === max ? "lightgreen" : value === min ? "lightcoral" : "",
+            backgroundColor: value === max ? "#d9ffd9" : value === min ? "#ffd2d2" : "",
             fontWeight: value === max || value === min ? "bold" : "normal",
         };
     };
