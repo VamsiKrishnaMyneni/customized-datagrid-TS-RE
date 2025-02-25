@@ -109,7 +109,7 @@ function Products() {
                     <button className='btn-refresh' onClick={() => window.location.reload()}>Try again</button></>}
             </div>)
             }
-            {
+            {!(loading || error) &&
                 <div className='products-container'>
                     <h2>Products Comparison</h2>
                     <DataGrid data={data} columns={columns} cellStyles={getCellStyle} />
