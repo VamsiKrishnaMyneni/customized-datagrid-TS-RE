@@ -1,25 +1,35 @@
 import { useEffect, useState } from 'react'
 import './datagrid.css'
 
-interface datagridProps {
-    columns: any[],
-    data: any[],
-    height?: number,
-    onRowClick?: (row: any) => {},
-    cellStyles?: (row: any, key: string, category: string) => {},
+// Column definition
+export interface Column<T> {
+    key: string;
+    label: string;
+    width?: number;
+    sort?: boolean;
+    render?: (row: T, value: any) => React.ReactNode;
 }
 
-function DataGrid(props: datagridProps) {
+// Props with generic type
+interface DataGridProps<T> {
+    columns: Column<T>[];
+    data: T[];
+    height?: number;
+    onRowClick?: (row: T) => void;
+    cellStyles?: (key: string, value: any, category: string) => React.CSSProperties;
+}
+
+function DataGrid<T extends Record<string, any>>(props: DataGridProps<T>) {
     const { columns = [], data = [], height = 400, onRowClick, cellStyles } = props;
-    const [tableData, setTableData] = useState(data || []);
+    const [tableData, setTableData] = useState<T[]>(data || []);
     const [sortConfig, setSortConfig] = useState({ key: '', direction: "asc" });
 
     useEffect(() => {
         setTableData(data);
     }, [data]);
 
-    const getValue = (row: any, key: string) => {
-        return key.split(".").reduce((acc, val) => acc[val], row) || "-";
+    const getValue = (row: T, key: string): any => {
+        return key.split(".").reduce((acc, val) => acc?.[val], row) ?? "-";
     };
 
     const handleSort = (key: string) => {
@@ -43,37 +53,43 @@ function DataGrid(props: datagridProps) {
 
     return (
         <div id="datagrid-container" className="table-container" style={{ height: `${height}px` }}>
-            <table className="table" style={{ width: `max(100%, ${columns.reduce((acc: any, col: any) => acc + (col.width || 200), 0)}px)` }}>
+            <table
+                className="table"
+                style={{ width: `max(100%, ${columns.reduce((acc, col) => acc + (col.width || 200), 0)}px)` }}
+            >
                 <thead>
                     <tr>
-                        {columns.map((col: any) => (
+                        {columns.map((col) => (
                             <th
                                 key={col.key}
-                                style={{ width: col.width || 200, cursor: "pointer" }}
-                                onClick={() => (col.sort && col.key) && handleSort(col.key)}
-                                className='col-header'
+                                style={{ width: col.width || 200, cursor: col.sort ? "pointer" : "default" }}
+                                onClick={() => col.sort && handleSort(col.key)}
+                                className="col-header"
                             >
-                                {col.label} &nbsp; {(sortConfig.key === col.key && col.sort && col.key) ? (sortConfig.direction === "asc" ? (
-                                    <i className="fas fa-sort-up"></i>
-                                ) : (
-                                    <i className="fas fa-sort-down"></i>
-                                )) : ""}
+                                {col.label} &nbsp;
+                                {(sortConfig.key === col.key && col.sort) && (
+                                    sortConfig.direction === "asc" ? (
+                                        <i className="fas fa-sort-up"></i>
+                                    ) : (
+                                        <i className="fas fa-sort-down"></i>
+                                    )
+                                )}
                             </th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
                     {tableData.length > 0 ? (
-                        tableData.map((row: any, rowIndex: number) => (
+                        tableData.map((row, rowIndex) => (
                             <tr
                                 key={rowIndex}
                                 className={rowIndex % 2 === 0 ? "bg-white" : "bg-neutral-50"}
-                                onClick={() => onRowClick && onRowClick(row)}
-
+                                onClick={() => onRowClick?.(row)}
                             >
-                                {columns.map((col: any) => (
-                                    <td key={col.key}
-                                        style={cellStyles && cellStyles(col.key, getValue(row, col.key), row.category)}
+                                {columns.map((col) => (
+                                    <td
+                                        key={col.key}
+                                        style={cellStyles?.(col.key, getValue(row, col.key), (row as any).category)}
                                     >
                                         {col.render ? col.render(row, getValue(row, col.key)) : getValue(row, col.key)}
                                     </td>
@@ -93,4 +109,4 @@ function DataGrid(props: datagridProps) {
     );
 }
 
-export default DataGrid
+export default DataGrid;
