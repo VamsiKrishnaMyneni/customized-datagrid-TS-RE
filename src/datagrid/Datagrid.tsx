@@ -29,7 +29,7 @@ function DataGrid<T extends Record<string, any>>(props: DataGridProps<T>) {
     }, [data]);
 
     const getValue = (row: T, key: string): any => {
-        return key.split(".").reduce((acc, val) => acc?.[val], row) ?? "-";
+        return key.split(".").reduce((acc, val) => acc?.[val], row) ?? "";
     };
 
     const handleSort = (key: string) => {
