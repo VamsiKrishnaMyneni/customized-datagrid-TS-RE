@@ -15,3 +15,70 @@
     background-color: #e0e0e0;
     /* Slightly darker gray on hover */
 }
+
+.products-container {
+    padding: 20px;
+}
+
+.product-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 4px;
+    object-fit: cover;
+}
+
+table,
+th,
+td {
+    border: 1.5px solid #ddd;
+    border-collapse: collapse;
+    padding: 8px;
+    text-align: center;
+
+}
+
+.product-title-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 200px;
+}
+
+.product-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+/* rating stars */
+
+.star-rating {
+    --percent: calc(var(--rating) / 5 * 100%);
+    --star-size: 30px;
+    --star-color: #fff;
+    --star-background: #fc0;
+
+    display: inline-block;
+    font-size: var(--star-size);
+    color: var(--star-color);
+    background: var(--star-background);
+    background-clip: text;
+    font-family: Times;
+    line-height: 1;
+
+    &::before {
+        content: '★★★★★';
+        letter-spacing: 3px;
+        background: linear-gradient(90deg, var(--star-background) var(--percent), var(--star-color) var(--percent));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+}
+
+/* rating stars */

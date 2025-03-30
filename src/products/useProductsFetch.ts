@@ -8,7 +8,7 @@ const useProductsFetch = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get('https://fakestoreapi.com/productss');
+            const response = await axios.get('https://fakestoreapi.com/products');
             setData(response.data);
         } catch (err: any) {
             setError("oops! Something went wrong.");
