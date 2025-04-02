@@ -1,46 +1,53 @@
-# Getting Started with Create React App
+## Running Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Prerequisites
 
-## Available Scripts
+Before running the application, ensure you have:
 
-In the project directory, you can run:
+Node.js installed (Download from Node.js official site) 
+Node version 22.12.0(goood to have)
 
-### `npm start`
+npm (comes with Node.js)
+npm version 10.9.0(goood to have)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+A code editor (e.g., Visual Studio Code)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Steps to Run the React App
 
-### `npm test`
+1. Clone the Repository
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+If the React project is hosted on a repository (e.g., GitHub), clone it using:
 
-### `npm run build`
+git clone [<repository-url>](https://github.com/VamsiKrishnaMyneni/products-comparison.git)
+ 
+2. Navigate to the Project Directory
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Move into the cloned project folder:
+cd products-comparison
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Install Dependencies
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Run the following command to install required dependencies:
 
-### `npm run eject`
+npm install
+  
+4. Start the Development Server
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Run the app in development mode:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+npm start
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+This will launch the app at http://localhost:3000/.
+ 
+5. Running Tests (If Applicable)
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+To execute test cases in the project:
 
-## Learn More
+npm test
+  
+6. Running Tests coverage (If Applicable)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+To execute test coverage in the project:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+npm run test:coverage
+  
