@@ -12,7 +12,7 @@ npm version 10.9.0(goood to have)
 
 A code editor (e.g., Visual Studio Code)
 
-# Steps to Run the React App
+# Steps to Run the App
 
 1. Clone the Repository
 
