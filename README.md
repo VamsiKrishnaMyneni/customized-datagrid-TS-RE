@@ -208,3 +208,87 @@ The component maintains the following state variables:
 ## Conclusion
 The **Products** component seamlessly integrates with the **DataGrid** to display and compare products. It enhances user experience by allowing dynamic selection and highlighting significant differences in product attributes.
 
+# useProductsFetch Hook Documentation
+
+## Overview
+The **useProductsFetch** hook is a custom React hook designed to fetch product data from an API. It manages the loading state, handles errors, and provides the fetched data to consuming components.
+
+## Hook Signature
+```tsx
+const { data, loading, error, fetchData } = useProductsFetch();
+```
+
+## State Management
+The hook maintains the following state variables:
+
+| State Variable | Type      | Description |
+|---------------|----------|-------------|
+| `data`        | `any[]`  | Stores the fetched product data. Initially an empty array. |
+| `loading`     | `boolean` | Indicates whether the API request is in progress. Initially `true`. |
+| `error`       | `string | null` | Stores an error message if the request fails. Initially `null`. |
+
+## Functions
+### 1. **fetchData** (Fetches Product Data)
+```tsx
+const fetchData = async () => {
+    try {
+        setLoading(true);
+        setError(null);
+
+        const response = await fetch("https://fakestoreapi.com/products");
+        if (!response.ok) {
+            setError("Oops! Something went wrong.");
+        }
+        const data = await response.json();
+        setData(data || []);
+    } catch (err: any) {
+        setError("Oops! Something went wrong.");
+    } finally {
+        setLoading(false);
+    }
+};
+```
+- Fetches product data from `https://fakestoreapi.com/products`.
+- Sets `loading` to `true` before making the request.
+- If the response is not OK, sets an error message.
+- Updates `data` state with the fetched products.
+- If an error occurs, sets `error`.
+- Finally, sets `loading` to `false` to indicate request completion.
+
+## Usage Example
+```tsx
+import { useEffect } from "react";
+import useProductsFetch from "./useProductsFetch";
+
+const Products = () => {
+    const { data, loading, error, fetchData } = useProductsFetch();
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    if (loading) return <p>Loading products...</p>;
+    if (error) return <p>Error: {error}</p>;
+
+    return (
+        <ul>
+            {data.map((product) => (
+                <li key={product.id}>{product.title}</li>
+            ))}
+        </ul>
+    );
+};
+```
+
+## Features & Enhancements
+✅ Fetches product data dynamically  
+✅ Handles loading and error states  
+✅ Provides a simple API for fetching data  
+
+## Potential Improvements
+🔹 Add caching to reduce unnecessary API calls  
+🔹 Implement pagination support  
+🔹 Enhance error handling with specific messages  
+
+## Conclusion
+The **useProductsFetch** hook provides a reusable and efficient way to fetch product data. It ensures smooth state management and error handling, making it a valuable addition to React applications.
