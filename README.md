@@ -115,6 +115,10 @@ The component accepts the following props:
 ```tsx
 <DataGrid
   columns={[
+         { label: "Select", key: "id", width: 10, render: (rowData: any) => {
+                return <input type="checkbox" onChange={() => handleRowSelect(rowData)} />
+     }
+    },
     { label: "Name", key: "name", sort: true },
     { label: "Age", key: "age", sort: true },
     { label: "Country", key: "address.country" },
@@ -131,4 +135,76 @@ The component accepts the following props:
 
 ## Conclusion
 The **DataGrid** component is a versatile table that provides sorting, row interaction, and customizable styles. It can be further extended with pagination, filtering, and advanced accessibility features to enhance usability.
+
+
+
+# Products Component Architecture
+
+## Overview
+The **Products** component is responsible for fetching, displaying, and enabling comparison of products using the **DataGrid** component. It allows users to select multiple products and compare values within the same category, highlighting the differences.
+
+## Props
+This component does not accept any props.
+
+## State Management
+The component maintains the following state variables:
+
+| State Variable   | Type        | Description |
+|-----------------|------------|-------------|
+| `selectedRows`  | `any[]` | Stores the list of selected products for comparison. |
+
+## Data Fetching
+- Uses the `useProductsFetch` custom hook to fetch product data.
+- The `useEffect` hook triggers `fetchData()` on component mount to fetch the initial product list.
+
+## Component Structure
+### 1. **Fetching Data**
+- The `useProductsFetch` hook returns:
+  - `data`: The fetched product list.
+  - `loading`: A boolean indicating if data is being fetched.
+  - `error`: An error message if the fetch fails.
+  - `fetchData()`: A function to manually trigger a refetch.
+- If `loading` is true, a loading message is displayed.
+- If `error` is present, an error message with a retry button is shown.
+
+### 2. **Product Selection for Comparison**
+- The `handleRowSelect(row: any)` function updates `selectedRows`:
+  - If a row is already selected, it is removed from `selectedRows`.
+  - Otherwise, it is added to the selection.
+- Users select products via checkboxes rendered in the first column.
+
+### 3. **Comparison Logic**
+- `getComparisonDifference(columnKey: string)`: Calculates the min and max values within each category for the selected products.
+- `getCellStyle(columnKey: string, value: any, category: string)`: Applies background color styling to highlight the highest and lowest values in the selected rows.
+
+### 4. **DataGrid Integration**
+- The component defines `columns` for the **DataGrid**:
+  - Includes an image, title, price, rating, description, and category.
+  - The first column contains a checkbox for selection.
+  - Some columns include custom renderers (e.g., star ratings, truncated descriptions).
+- The `DataGrid` receives:
+  - `data`: The fetched product data.
+  - `columns`: The column configuration.
+  - `cellStyles`: The styling function for comparison highlighting.
+
+## Features & Enhancements
+✅ Fetches product data dynamically  
+✅ Displays product list in a table format  
+✅ Allows multi-product selection for comparison  
+✅ Highlights differences in numeric values  
+✅ Handles loading and error states  
+
+## Potential Improvements
+🔹 Implement pagination for large datasets  
+🔹 Allow multi-column sorting  
+🔹 Improve accessibility with ARIA attributes  
+🔹 Add filters to refine product selection  
+
+## Usage Example
+```tsx
+<Products />
+```
+
+## Conclusion
+The **Products** component seamlessly integrates with the **DataGrid** to display and compare products. It enhances user experience by allowing dynamic selection and highlighting significant differences in product attributes.
 
