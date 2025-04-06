@@ -34,12 +34,12 @@
 
 
 .product-image {
-    width: 30px;
-    height: 30px;
+    width: 100%;
+    height: 100%;
     border-radius: 4px;
-    object-fit: cover;
+    object-fit: fill;
     padding: 5px;
-    border: 1px solid #c1c0c0;
+    border: 2px solid #c1c0c0;
 }
 
 /* rating stars */
