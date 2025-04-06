@@ -146,8 +146,7 @@ The `DataGridProps` interface defines the overall structure of the `DataGrid` co
 
 ```tsx
 <DataGrid
-  columns={[
-    [{ label: "Select", key: "id", width: 10, render: (rowData: any) => {
+  columns={[{ label: "Select", key: "id", width: 10, render: (rowData: any) => {
                 return <input type="checkbox" onChange={() => handleRowSelect(rowData)} />
      }},
     { key: 'age', label: 'Age', width: 100, sort: true },
