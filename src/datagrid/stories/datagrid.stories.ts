@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-
-import DataGrid, { Column } from '../datagrid';
 import { fn } from '@storybook/test';
+import DataGrid, { Column } from '../';
 
 // Example type for the row data
 type User = {
@@ -19,7 +18,10 @@ const mockData: User[] = [
 ];
 
 const columns: Column<User>[] = [
-    { key: 'name', label: 'Name', sort: true },
+    {
+        key: 'name', label: 'Name', sort: true, render: (row, value) => value
+
+    },
     { key: 'email', label: 'Email' },
     { key: 'age', label: 'Age', sort: true },
     { key: 'role', label: 'Role' },
