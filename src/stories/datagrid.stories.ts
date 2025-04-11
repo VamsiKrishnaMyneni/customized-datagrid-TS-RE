@@ -1,7 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import DataGrid from '../datagrid';
+import DataGrid, { Column } from '../datagrid';
 import { fn } from '@storybook/test';
+
+// Example type for the row data
+type User = {
+    id: number;
+    name: string;
+    email: string;
+    age: number;
+    role: string;
+    category?: string;
+};
+const mockData: User[] = [
+    { id: 1, name: 'Alice', email: 'alice@example.com', age: 28, role: 'Admin', category: 'A' },
+    { id: 2, name: 'Bob', email: 'bob@example.com', age: 34, role: 'Editor', category: 'B' },
+    { id: 3, name: 'Charlie', email: 'charlie@example.com', age: 22, role: 'Viewer', category: 'A' },
+];
+
+const columns: Column<User>[] = [
+    { key: 'name', label: 'Name', sort: true },
+    { key: 'email', label: 'Email' },
+    { key: 'age', label: 'Age', sort: true },
+    { key: 'role', label: 'Role' },
+];
+
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -29,8 +52,9 @@ type Story = StoryObj<typeof meta>;
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Grid: Story = {
     args: {
-        data: [],
-        columns: [],
+        data: mockData,
+        columns: columns as Column<Record<string, any>>[],
         height: 400,
+        cellStyles: (key: string, value: any, category: string) => ({})
     },
 };
